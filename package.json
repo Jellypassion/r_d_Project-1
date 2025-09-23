@@ -1,0 +1,27 @@
+{
+  "name": "lesson-3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jellypassion/r_d_Project-1.git"
+  },
+  "author": "Eugene",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jellypassion/r_d_Project-1/issues"
+  },
+  "homepage": "https://github.com/Jellypassion/r_d_Project-1#readme",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.36.0",
+    "@stylistic/eslint-plugin": "^5.4.0",
+    "eslint": "^9.36.0",
+    "eslint-plugin-unicorn": "^61.0.2",
+    "globals": "^16.4.0",
+    "prettier": "^3.6.2"
+  }
+}
