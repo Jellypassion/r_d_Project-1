@@ -1,1 +1,1 @@
-# r_d_Project-1
+# Lesson 3. Variables and data types. Conditional structures - Homework
