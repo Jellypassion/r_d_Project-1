@@ -1,8 +1,4 @@
 function sumAllItems(array: number[] | string[]): void {
-    if (!Array.isArray(array)) {
-        console.log('The argument is not array');
-        return;
-    }
     if (array.length === 0) {
         console.log('Array is empty');
         return;
