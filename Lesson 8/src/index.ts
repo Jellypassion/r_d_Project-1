@@ -5,9 +5,11 @@ async function main() {
     try {
         const user1 = await fetchUser(1);
         const shortUser1 = new UserShort(user1);
-        console.log(`Full User: ${user1}`);
-        console.log(`Short User: ${shortUser1}`);
+        console.log('Full User: ', user1);
+        console.log('Short User: ', shortUser1);
     } catch (error) {
         console.error('Error:', error);
     }
 }
+
+main();

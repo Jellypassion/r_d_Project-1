@@ -1,5 +1,5 @@
-import { API_BASE_URL, USER_ENDPOINT } from 'src/models/config';
-import { UserDTO } from 'src/models/user.interface';
+import { API_BASE_URL, USER_ENDPOINT } from '../models/config';
+import { UserDTO } from '../models/user.interface';
 
 export async function fetchUser(id: number): Promise<UserDTO> {
     const url = `${API_BASE_URL}${USER_ENDPOINT}/${id}`;

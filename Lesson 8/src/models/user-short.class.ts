@@ -1,4 +1,4 @@
-import { UserDTO } from 'src/models/user.interface';
+import { UserDTO } from '../models/user.interface';
 
 export class UserShort {
     id: number;
