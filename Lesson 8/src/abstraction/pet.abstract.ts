@@ -1,25 +1,23 @@
-import { IPet } from './i-pet.interface';
+export abstract class Pet {
+    public name: string;
+    public age: number;
+    public isHungry = false;
 
-export abstract class Pet implements IPet {
-    name: string;
-    age: number;
-    public isHungry: boolean = false;
-
-    constructor(name: string, age: number) {
+    public constructor(name: string, age: number) {
         this.name = name;
         this.age = age;
     }
 
-    abstract getInfo(): string;
+    public abstract getInfo(): string;
 
-    abstract makeSound(): void;
+    public abstract makeSound(): void;
 
-    checkIfItHungry() {
+    public checkIfItHungry(): void {
         const hungryCondition = this.isHungry ? ' is hungry' : ' is not hungry';
         console.log(`${this.name}${hungryCondition}`);
     }
 
-    feed(): void {
+    public feed(): void {
         if (!this.isHungry) {
             console.log(`${this.name} is not hungry!`);
             return;
@@ -30,7 +28,7 @@ export abstract class Pet implements IPet {
         this.isHungry = false;
     }
 
-    spendSomeTime(): void {
+    public spendSomeTime(): void {
         this.isHungry = true;
     }
 }

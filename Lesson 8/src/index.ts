@@ -3,7 +3,7 @@ import { UserShort } from './models/user-short.class';
 import { Cat } from './implementation/cat.class';
 import { Dog } from './implementation/dog.class';
 
-async function main() {
+async function main(): Promise<void> {
     try {
         const user1 = await fetchUser(1);
         const shortUser1 = new UserShort(user1);
