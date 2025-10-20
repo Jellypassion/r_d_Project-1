@@ -19,4 +19,7 @@ diesel.refuel();
 console.log('Fuel level: ' + diesel.getFuelLevel());
 
 service.inspect(diesel);
+service.service(diesel.getEngine());
+
+service.service(electric.getEngine());
 service.reenergize(electric);

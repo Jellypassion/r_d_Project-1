@@ -27,4 +27,8 @@ export abstract class Vehicle {
     public getEngineInfo(): string {
         return this._engine.toString();
     }
+
+    public getEngine(): IEngine {
+        return this._engine;
+    }
 }
