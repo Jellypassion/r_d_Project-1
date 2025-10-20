@@ -10,4 +10,8 @@ export class TurboEngine implements IEngine {
     public getEfficiency(): number {
         return 70;
     }
+
+    public toString(): string {
+        return `Turbo Engine (Efficiency: ${this.getEfficiency()}%)`;
+    }
 }

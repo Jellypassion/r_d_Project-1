@@ -10,4 +10,8 @@ export class ElectricMotor implements IEngine {
     public getEfficiency(): number {
         return 85;
     }
+
+    public toString(): string {
+        return `Electric Motor (Efficiency: ${this.getEfficiency()}%)`;
+    }
 }

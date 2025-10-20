@@ -13,7 +13,7 @@ export abstract class Vehicle {
     }
 
     public getInfo(): string {
-        return `${this._brand} ${this._model} ${this._engine}`;
+        return `${this._brand} ${this._model}`;
     }
 
     public abstract drive(): void;
@@ -22,5 +22,9 @@ export abstract class Vehicle {
     public accelerate(amount: number): void {
         this._speed += amount;
         console.log(`${this._brand} ${this._model} accelerates to ${this._speed} km/h`);
+    }
+
+    public getEngineInfo(): string {
+        return this._engine.toString();
     }
 }
