@@ -10,7 +10,13 @@ const diesel = new DieselCar('BMW', 'X5', new TurboEngine());
 const service = new VehicleService();
 
 electric.drive();
+electric.accelerate(60);
+console.log('Battery status: ' + electric.getBatteryStatus());
+
 diesel.drive();
+console.log('Fuel level: ' + diesel.getFuelLevel());
+diesel.refuel();
+console.log('Fuel level: ' + diesel.getFuelLevel());
 
 service.inspect(diesel);
 service.reenergize(electric);
