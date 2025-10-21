@@ -1,0 +1,32 @@
+{
+    "name": "lesson-10",
+    "version": "1.0.0",
+    "description": "",
+    "license": "ISC",
+    "author": "",
+    "type": "commonjs",
+    "main": "index.js",
+    "scripts": {
+        "test": "mocha -r ts-node/register tests/**/*.test.ts"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.37.0",
+        "@stylistic/eslint-plugin": "^5.4.0",
+        "@stylistic/eslint-plugin-ts": "^4.4.1",
+        "@types/chai": "^5.2.3",
+        "@types/expect": "^1.20.4",
+        "@types/mocha": "^10.0.10",
+        "chai": "^6.2.0",
+        "eslint": "^9.37.0",
+        "eslint-plugin-prettier": "^5.5.4",
+        "eslint-plugin-unicorn": "^61.0.2",
+        "globals": "^16.4.0",
+        "mocha": "^11.7.4",
+        "prettier": "^3.6.2",
+        "ts-mocha": "^11.1.0",
+        "ts-node": "^10.9.2",
+        "tsx": "^4.20.6",
+        "typescript": "^5.9.3",
+        "typescript-eslint": "^8.46.0"
+    }
+}
