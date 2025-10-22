@@ -9,9 +9,9 @@
   ],
   "compilerOptions": {
     "baseUrl": "./",
-    "target": "ES6",
-    "lib": ["es6", "DOM"],
-    "module": "commonjs",
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "module": "ESNext",
     "rootDir": ".",
     "resolveJsonModule": true,
     "allowJs": true,
@@ -25,5 +25,9 @@
     "typeRoots": [
       "node_modules/@types"
     ]
+  },
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   }
 }
