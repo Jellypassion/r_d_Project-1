@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, it, vi} from 'vitest';
+import {beforeEach, afterEach, describe, expect, it, vi} from 'vitest';
 import { IEngine } from '../src/interfaces/i-engine';
 import { DieselCar } from '../src/models/diesel-car';
 import { ElectricCar } from '../src/models/electric-car';
@@ -17,6 +17,10 @@ describe ('Vehicles tests with mocks and spies', () => {
         electricMotor = new ElectricMotor();
         diesel = new DieselCar('BMW', 'X5', dieselEngine);
         electric = new ElectricCar('Tesla', 'Model 3', electricMotor);
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
     });
 
     it('should spy on engine.start when driving DieselCar', () => {
