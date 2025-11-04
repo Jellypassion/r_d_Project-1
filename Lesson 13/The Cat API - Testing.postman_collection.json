@@ -12,6 +12,31 @@
 			"item": [
 				{
 					"name": "/images/:image_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseJson = pm.response.json();",
+									"const imageId = pm.collectionVariables.get(\"lastImageId\");",
+									"const imageUrl = pm.collectionVariables.get(\"lastImageUrl\");",
+									"",
+									"pm.test(\"Response contains id and url\", function () {",
+									"    pm.expect(responseJson).to.have.property(\"id\", imageId);",
+									"    pm.expect(responseJson).to.have.property(\"url\", imageUrl);",
+									"    pm.expect(responseJson.url).to.contain(imageId);// check that the url contains the image id",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -43,42 +68,6 @@
 							]
 						},
 						"description": "Return 1 image matchin the id passed."
-					},
-					"response": []
-				},
-				{
-					"name": "/images/:image_id/analysis",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [
-							{
-								"key": "x-api-key",
-								"value": "{{YOUR-API-KEY}}",
-								"description": "[optional]  will save this request to your account analytics\n"
-							}
-						],
-						"url": {
-							"raw": "{{endpoint}}v1/images/{{lastImageId}}",
-							"host": [
-								"{{endpoint}}v1"
-							],
-							"path": [
-								"images",
-								"{{lastImageId}}"
-							],
-							"query": [
-								{
-									"key": "sub_id",
-									"value": "",
-									"description": "[optional] if you want to save this request to your account stats",
-									"disabled": true
-								}
-							]
-						},
-						"description": "Get the raw analysis results for any uploaded image"
 					},
 					"response": []
 				},
@@ -185,8 +174,9 @@
 									"    pm.expect(responseJson.id).is.string;",
 									"});",
 									"",
-									"pm.test(\"set id as a variable \", function () {",
+									"pm.test(\"save id and url as collectionVariables\", function () {",
 									"    pm.collectionVariables.set(\"lastImageId\", responseJson.id);",
+									"    pm.collectionVariables.set(\"lastImageUrl\", responseJson.url);",
 									"});"
 								],
 								"type": "text/javascript",
@@ -218,7 +208,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/Users/eugene/Downloads/cat-2.jpg"
+									"src": "/Users/eugene/Downloads/cat-3.jpg"
 								},
 								{
 									"key": "sub_id",
@@ -272,13 +262,13 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{endpoint}}v1/images/{{lastImageId}}",
+							"raw": "{{endpoint}}v1/images/7QpQTiXZE",
 							"host": [
 								"{{endpoint}}v1"
 							],
 							"path": [
 								"images",
-								"{{lastImageId}}"
+								"7QpQTiXZE"
 							]
 						}
 					},
@@ -312,20 +302,21 @@
 									"    }",
 									"});",
 									"",
-									"// to make it pass, ensure that lastFavourite or lastImage was not deleted",
-									"pm.test(\"Response contain favourite object with image data\", function () {",
-									"    if (responseArray.length != 0) {",
+									"if (responseArray.length !== 0) {",
+									"pm.test(\"Response contains favourite object with image data\", function () {",
 									"        const lastFavouriteId = pm.collectionVariables.get(\"lastFavouriteId\");",
 									"        const lastImageId = pm.collectionVariables.get(\"lastImageId\");",
-									"",
+									"        const lastImageUrl = pm.collectionVariables.get(\"lastImageUrl\");",
 									"        const favItem = responseArray.find(item => item.id === lastFavouriteId);",
 									"",
 									"        pm.expect(favItem.image_id).to.equal(lastImageId);",
 									"        pm.expect(favItem).to.have.property(\"image\");",
 									"        pm.expect(favItem.image).to.be.not.null;",
-									"        pm.expect(favItem.image).to.have.property(\"id\");",
-									"    }",
+									"        pm.expect(favItem.image).to.have.property(\"id\", lastImageId);",
+									"        pm.expect(favItem.image).to.have.property(\"url\", lastImageUrl);",
+									"        pm.expect(favItem.image.url).to.include(lastImageId);",
 									"});",
+									"}",
 									""
 								],
 								"type": "text/javascript",
@@ -519,9 +510,10 @@
 									"});",
 									"",
 									"if (responseArray.lenght !== 0) {",
-									"    pm.test(\"Response contain vote object\", function () {",
+									"    pm.test(\"Response contain vote object with correct image data\", function () {",
 									"        const lastVoteId = pm.collectionVariables.get(\"lastVoteId\");",
 									"        const lastImageId = pm.collectionVariables.get(\"lastImageId\");",
+									"        const lastImageUrl = pm.collectionVariables.get(\"lastImageUrl\");",
 									"        const voteItem = responseArray.find(item => item.id === lastVoteId);",
 									"",
 									"        pm.expect(voteItem).to.have.property('id', lastVoteId);",
@@ -531,7 +523,8 @@
 									"        pm.expect(voteItem).to.have.property('image');",
 									"        pm.expect(voteItem.image).to.be.an('object');",
 									"        pm.expect(voteItem.image).to.have.property('id', lastImageId);",
-									"        pm.expect(voteItem.image).to.have.property('url');",
+									"        pm.expect(voteItem.image).to.have.property('url', lastImageUrl);",
+									"        pm.expect(voteItem.image.url).to.contain(lastImageId);",
 									"    });",
 									"}",
 									"",
@@ -660,7 +653,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"image_id\":\"{{lastImageId}}\",\n\t\"sub_id\": \"my-user-12345\",\n    \"value\":9\n}"
+							"raw": "{\n\t\"image_id\":\"{{lastImageId}}\",\n\t\"sub_id\": \"my-user-12345\",\n    \"value\":10\n}"
 						},
 						"url": {
 							"raw": "{{endpoint}}v1/votes",
@@ -760,6 +753,10 @@
 		},
 		{
 			"key": "lastVoteId",
+			"value": ""
+		},
+		{
+			"key": "lastImageUrl",
 			"value": ""
 		}
 	]
