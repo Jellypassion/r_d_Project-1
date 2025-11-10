@@ -2,7 +2,6 @@ import { ImageDto } from "src/models/the-cat-api/image.dto";
 import { IApiService } from "src/services/abstractions/i-api-service";
 import * as fs from "fs";
 
-
 export class CatImagesApi {
     public constructor(private readonly apiService: IApiService<Response>) {}
 

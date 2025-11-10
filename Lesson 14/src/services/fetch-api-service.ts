@@ -29,7 +29,7 @@ export class FetchApiService implements IApiService<Response> {
         });
     }
     public async postForm(uri: string, formData: FormData, headers?: Record<string, string>): Promise<Response> {
-        const defaultHeaders = this.getDefaultHeaders(headers);
+        const defaultHeaders = this.getDefaultHeadersForPostForm(headers);
 
         return await fetch(`${this.baseUrl}${uri}`, {
             method: 'POST',
@@ -48,6 +48,17 @@ export class FetchApiService implements IApiService<Response> {
     }
 
     private getDefaultHeaders(headers?: Record<string, string>): Record<string, string> {
+        return {
+            ...this.getAuthHeaders(),
+            ...headers,
+            ...{
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            }
+        };
+    }
+
+    private getDefaultHeadersForPostForm(headers?: Record<string, string>): Record<string, string> {
         return {
             ...this.getAuthHeaders(),
             ...headers,
