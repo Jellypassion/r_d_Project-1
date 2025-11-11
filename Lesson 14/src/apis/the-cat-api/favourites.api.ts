@@ -1,5 +1,5 @@
-import { AddFavouriteRequest, AddFavouriteResponse, FavouriteDto } from "src/models/the-cat-api/favourite.dto";
-import { IApiService } from "src/services/abstractions/i-api-service";
+import { AddFavouriteRequest, AddFavouriteResponse, FavouriteDto } from 'src/models/the-cat-api/favourite.dto';
+import { IApiService } from 'src/services/abstractions/i-api-service';
 
 export class FavouritesApi {
     public constructor(private readonly apiService: IApiService<Response>) {}
