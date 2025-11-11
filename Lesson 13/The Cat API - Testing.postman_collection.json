@@ -1,0 +1,763 @@
+{
+	"info": {
+		"_postman_id": "efa71dd0-bee5-4cc8-9fde-bbc96cf01d14",
+		"name": "The Cat API - Testing",
+		"description": "![image](https://cdn2.thecatapi.com/logos/thecatapi_256xW.png)\n\n## An open, free, read & write API all about Cats\nThe Cat API gives you access to 10000's of cat images\n- Upload your own images\n- Favourite or Vote on images\n- Get stats on your requests\n- Save a custom value with each request for each of your users\n\n## How is this free?\nMy goal is to create free, fun & useful public service API's, helping people learn to code, create awesome projects, and be a stable fixture in a turbulent world.\n\n## How do i get access?\nJust signup for an API Key from https://theCatAPI.com for free. I'm looking forward to seeing what you make!",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1775801"
+	},
+	"item": [
+		{
+			"name": "Images",
+			"item": [
+				{
+					"name": "/images/:image_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseJson = pm.response.json();",
+									"const imageId = pm.collectionVariables.get(\"lastImageId\");",
+									"const imageUrl = pm.collectionVariables.get(\"lastImageUrl\");",
+									"",
+									"pm.test(\"Response contains id and url\", function () {",
+									"    pm.expect(responseJson).to.have.property(\"id\", imageId);",
+									"    pm.expect(responseJson).to.have.property(\"url\", imageUrl);",
+									"    pm.expect(responseJson.url).to.contain(imageId);// check that the url contains the image id",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[optional]  will save this request to your account analytics\n"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}v1/images/{{lastImageId}}",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"images",
+								"{{lastImageId}}"
+							],
+							"query": [
+								{
+									"key": "sub_id",
+									"value": "",
+									"description": "[optional] if you want to save this request to your account stats",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Return 1 image matchin the id passed."
+					},
+					"response": []
+				},
+				{
+					"name": "/images/ (Your uploads)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required] - will return all the images from your account\n"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}v1/images/?limit=10&page=0&order=DESC",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"images",
+								""
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10",
+									"description": "[Optional] number of images to return valid  1 to 10 - default: 1"
+								},
+								{
+									"key": "page",
+									"value": "0",
+									"description": "[Optional] only works if account_id is present to page through your own uploads"
+								},
+								{
+									"key": "order",
+									"value": "DESC",
+									"description": "[Optional] only works if account_id is present, either ASC or DESC - ascending or descending."
+								},
+								{
+									"key": "sub_id",
+									"value": "user1",
+									"description": "[Optional] If you want to ",
+									"disabled": true
+								},
+								{
+									"key": "breed_ids",
+									"value": "1,4,28",
+									"description": "[Optional] Id's of the breeds to filter by",
+									"disabled": true
+								},
+								{
+									"key": "category_ids",
+									"value": "4",
+									"description": "[Optional] Id's of the categories to filter by",
+									"disabled": true
+								},
+								{
+									"key": "format",
+									"value": "json",
+									"description": "[Optional] default is 'json', pass 'src' to redirect the request to the image's url - this is useful for setting the 'src' of an <img> tag.",
+									"disabled": true
+								},
+								{
+									"key": "original_filename",
+									"value": "",
+									"description": "[Optiona] filter to files you uploaded with the same name",
+									"disabled": true
+								},
+								{
+									"key": "user_id",
+									"value": "",
+									"description": "[Optional] default applied your unique user_id from welcome email, filter to only show images from your account that you have uploaded",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Only returns images from your account, uploaded via 'api/v1/images/upload'"
+					},
+					"response": []
+				},
+				{
+					"name": "/images/upload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"id was applied\", function () {",
+									"    pm.expect(responseJson.id).is.not.null;",
+									"    pm.expect(responseJson.id).is.string;",
+									"});",
+									"",
+									"pm.test(\"save id and url as collectionVariables\", function () {",
+									"    pm.collectionVariables.set(\"lastImageId\", responseJson.id);",
+									"    pm.collectionVariables.set(\"lastImageUrl\", responseJson.url);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"disabled": true
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required] - saves the uploaded image to your account."
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/Users/eugene/Downloads/cat-3.jpg"
+								},
+								{
+									"key": "sub_id",
+									"value": "",
+									"description": "[optional] - a string you can use to segment your images, e.g. knowing which of your own users uploaded it.",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "breed_ids",
+									"value": "",
+									"description": "[optional] comma separated string of breed ids contained in the image",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{endpoint}}v1/images/upload",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"images",
+								"upload"
+							]
+						},
+						"description": "Make sure you're using the right field to send the image, and Content-Type header"
+					},
+					"response": []
+				},
+				{
+					"name": "/images/:image_id",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{endpoint}}v1/images/7QpQTiXZE",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"images",
+								"7QpQTiXZE"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favourites",
+			"item": [
+				{
+					"name": "/favourites",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseArray = pm.response.json();",
+									"",
+									"",
+									"pm.test(\"Every item in the response array has an 'id'\", () => {",
+									"    pm.expect(responseArray).to.be.an('array');",
+									"    if (responseArray.length != 0) {",
+									"        responseArray.forEach(element => {",
+									"            pm.expect(element).to.have.deep.property('id');",
+									"        });",
+									"    }",
+									"});",
+									"",
+									"if (responseArray.length !== 0) {",
+									"pm.test(\"Response contains favourite object with image data\", function () {",
+									"        const lastFavouriteId = pm.collectionVariables.get(\"lastFavouriteId\");",
+									"        const lastImageId = pm.collectionVariables.get(\"lastImageId\");",
+									"        const lastImageUrl = pm.collectionVariables.get(\"lastImageUrl\");",
+									"        const favItem = responseArray.find(item => item.id === lastFavouriteId);",
+									"",
+									"        pm.expect(favItem.image_id).to.equal(lastImageId);",
+									"        pm.expect(favItem).to.have.property(\"image\");",
+									"        pm.expect(favItem.image).to.be.not.null;",
+									"        pm.expect(favItem.image).to.have.property(\"id\", lastImageId);",
+									"        pm.expect(favItem.image).to.have.property(\"url\", lastImageUrl);",
+									"        pm.expect(favItem.image.url).to.include(lastImageId);",
+									"});",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}v1/favourites",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"favourites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/favourites/:favourite_id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}v1/favourites/{{lastFavouriteId}}",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"favourites",
+								"{{lastFavouriteId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/favourites",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"Check status message\", function () {",
+									"    pm.expect(responseJson.message).to.equal(\"success\".toUpperCase())",
+									"});",
+									"",
+									"",
+									"pm.test(\"Favourite has an id\", function () {",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson.id).to.be.not.null;",
+									"    pm.collectionVariables.set(\"lastFavouriteId\", responseJson.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"image_id\": \"{{lastImageId}}\",\n\t\"sub_id\": \"my-user-1234\"\n}"
+						},
+						"url": {
+							"raw": "{{endpoint}}v1/favourites",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"favourites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/favourites/:favourite_id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Check status message\", function () {",
+									"    pm.expect(pm.response.json().message).to.equal(\"success\".toUpperCase())",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}v1/favourites/{{lastFavouriteId}}",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"favourites",
+								"{{lastFavouriteId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Votes",
+			"item": [
+				{
+					"name": "/votes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"const responseArray = pm.response.json();",
+									"",
+									"pm.test(\"Response is array\", function () {",
+									"    pm.expect(responseArray).to.be.an('array');",
+									"});",
+									"",
+									"if (responseArray.lenght !== 0) {",
+									"    pm.test(\"Response contain vote object with correct image data\", function () {",
+									"        const lastVoteId = pm.collectionVariables.get(\"lastVoteId\");",
+									"        const lastImageId = pm.collectionVariables.get(\"lastImageId\");",
+									"        const lastImageUrl = pm.collectionVariables.get(\"lastImageUrl\");",
+									"        const voteItem = responseArray.find(item => item.id === lastVoteId);",
+									"",
+									"        pm.expect(voteItem).to.have.property('id', lastVoteId);",
+									"        pm.expect(voteItem).to.have.property('image_id', lastImageId);",
+									"        pm.expect(voteItem).to.have.property('value');",
+									"        pm.expect(voteItem).to.have.property('country_code');",
+									"        pm.expect(voteItem).to.have.property('image');",
+									"        pm.expect(voteItem.image).to.be.an('object');",
+									"        pm.expect(voteItem.image).to.have.property('id', lastImageId);",
+									"        pm.expect(voteItem.image).to.have.property('url', lastImageUrl);",
+									"        pm.expect(voteItem.image.url).to.contain(lastImageId);",
+									"    });",
+									"}",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}v1/votes?limit=10&order=DESC",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"votes"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "10"
+								},
+								{
+									"key": "order",
+									"value": "DESC"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/votes/:vote_id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}v1/votes/{{lastVoteId}}",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"votes",
+								"{{lastVoteId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/votes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"const responseJson = pm.response.json();",
+									"",
+									"pm.test(\"Response have required properties\", function () {",
+									"    pm.expect(responseJson).to.have.property(\"message\");",
+									"    pm.expect(responseJson).to.have.property(\"id\");",
+									"    pm.expect(responseJson).to.have.property(\"image_id\");",
+									"    pm.expect(responseJson).to.have.property(\"sub_id\");",
+									"    pm.expect(responseJson).to.have.property(\"value\");",
+									"    pm.expect(responseJson).to.have.property(\"country_code\");",
+									"});",
+									"",
+									"pm.test(\"Id applied to a vote\", function () {",
+									"    pm.expect(responseJson.id).to.not.be.null;",
+									"    pm.expect(responseJson.id).to.be.a(\"number\");",
+									"    pm.collectionVariables.set(\"lastVoteId\", responseJson.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"image_id\":\"{{lastImageId}}\",\n\t\"sub_id\": \"my-user-12345\",\n    \"value\":10\n}"
+						},
+						"url": {
+							"raw": "{{endpoint}}v1/votes",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"votes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/votes/:vote_id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"value": "{{YOUR-API-KEY}}",
+								"description": "[required]"
+							}
+						],
+						"url": {
+							"raw": "{{endpoint}}v1/vote/{{lastVoteId}}",
+							"host": [
+								"{{endpoint}}v1"
+							],
+							"path": [
+								"vote",
+								"{{lastVoteId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "version",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{endpoint}}",
+					"host": [
+						"{{endpoint}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "YOUR-API-KEY",
+			"value": "example-api-key"
+		},
+		{
+			"key": "endpoint",
+			"value": ""
+		},
+		{
+			"key": "lastImageId",
+			"value": ""
+		},
+		{
+			"key": "lastFavouriteId",
+			"value": ""
+		},
+		{
+			"key": "lastVoteId",
+			"value": ""
+		},
+		{
+			"key": "lastImageUrl",
+			"value": ""
+		}
+	]
+}
