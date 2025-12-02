@@ -12,6 +12,10 @@ export class AlloPage {
         return this.page.locator('.mh-catalog-btn .ct-button');
     }
 
+    public openCatalog(): Promise<void> {
+        return this.catalogButton.click();
+    }
+
     public get electricAutoCategoryLink(): Locator {
         return this.page.locator('//li[@class="mm__item"]/a[@href="https://allo.ua/ua/elektromobili/"]');
     }
