@@ -8,10 +8,6 @@ export class CatalogComponent {
     }
 
     public getSingleCatalogItem(itemName: string): Locator {
-        // return this.baseLocator.locator(`ul.mm__list:has-text("${itemName}") >> a`);
-        // return this.baseLocator.locator(`:has-text("${itemName}") >> a.mm__a >> img`);
-        // return this.baseLocator.filter({ hasText: itemName }).locator('a').first();
-        // return this.baseLocator.locator(`:text("${itemName}")`);
         return this.baseLocator.locator(`a:has-text("${itemName}")`);
     }
 
