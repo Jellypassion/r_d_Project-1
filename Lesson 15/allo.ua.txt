@@ -1,0 +1,29 @@
+allo.ua
+
+CSS
+1. Відкрити allo.ua
+2. Клікнути на input#search-form__input, вводимо Iphone Air
+3. Клікнути div.sort-by__select, обрати ul.sort-by__list li:nth-child(3)
+4. Клікнути a[data-id="48"]
+5. Клікнути button.f-popup__btn (поки попап активний)
+6. Клікнути div[data-product-id="25838223"]
+7. Клікнути ul#p-attributes-color__list li[data-valueid="1396"]
+
+1. Відкрити allo.ua
+2. Клікнути .mh-catalog-btn .ct-button
+3. Клікнути li.mm__item a[href="https://allo.ua/ua/elektromobili/"] img.mm__i
+4. На сторінці, що відкрилася обрати a[data-id="1822"]
+5. Клікнути div.sort-by__select, обрати li[title="від дешевих до дорогих"]
+
+XPATH
+1. Відкрити allo.ua
+2. Клікнути //li[@class="mm__item"]/a[@href="https://allo.ua/ua/xiaomi-store/"][1]
+3. Клікнути //img[@title="Мультимедiа"]
+4. Клікнути //div[@data-slick-index="0"]//a[@href="https://allo.ua/televizory/proizvoditel-xiaomi/"]
+5. Клікнути //a[@title="Телевізор Xiaomi TV A Pro 50 2026"]
+
+1. Відкрити allo.ua
+2. Клікнути //div[@class="mh-links"]/a[1]
+3. Клікнути //*[@class="a-buttons-list"]//button[3]
+4. Клікнути //*[contains(text(), 'Магазин № 3259')]
+5. Переконатися, що елемент //*[@class='store-item store-item--map']//*[@class='store-item__phone'] присутній
