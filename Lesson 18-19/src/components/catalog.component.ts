@@ -1,4 +1,4 @@
-import { Locator } from "@playwright/test";
+import { Locator } from '@playwright/test';
 
 export class CatalogComponent {
     public constructor(protected readonly baseLocator: Locator) {}
@@ -7,15 +7,20 @@ export class CatalogComponent {
         return this.baseLocator.locator('li.mm__item>a');
     }
 
-    private getSingleCatalogItem(itemName:string): Locator {
-        return this.baseLocator.locator(`ul.mm__list:has-text("${itemName}")`);
+    public getSingleCatalogItem(itemName: string): Locator {
+        // return this.baseLocator.locator(`ul.mm__list:has-text("${itemName}") >> a`);
+        // return this.baseLocator.locator(`:has-text("${itemName}") >> a.mm__a >> img`);
+        // return this.baseLocator.filter({ hasText: itemName }).locator('a').first();
+        // return this.baseLocator.locator(`:text("${itemName}")`);
+        return this.baseLocator.locator(`a:has-text("${itemName}")`);
     }
 
     public async getCatalogItems(): Promise<string[]> {
         const catalogItems: string[] = [];
         const singleCatalogItems = await this.singleCatalogItem.all();
         for (const item of singleCatalogItems) {
-            catalogItems.push(await item.textContent() as string);
+            const textContent = await item.textContent();
+            catalogItems.push((textContent || '').trim());
         }
         return catalogItems;
     }
@@ -37,9 +42,7 @@ export class CatalogComponent {
         if (!catalogItems.includes(itemName)) {
             throw new Error(`Catalog does not contain item with name: ${itemName}`);
         }
-
         const singleCatalogItem = this.getSingleCatalogItem(itemName);
         await singleCatalogItem.click();
     }
-
 }
