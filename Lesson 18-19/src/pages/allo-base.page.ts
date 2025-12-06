@@ -7,6 +7,10 @@ export class AlloBasePage {
         await this.page.goto(this._url);
     }
 
+    public getTitle(): Promise<string> {
+        return this.page.title();
+    }
+
     public get catalogButton(): Locator {
         return this.page.locator('.mh-catalog-btn .ct-button');
     }
@@ -18,8 +22,12 @@ export class AlloBasePage {
     // Catalog component - call openCatalog() first to display the catalog menu
     public readonly CatalogComponent: CatalogComponent;
 
-    public constructor(private readonly page: Page, private readonly _url = 'https://allo.ua/') {
-        this.CatalogComponent = new CatalogComponent(this.page.locator('div>ul.mm__list'));
+    public get page(): Page {
+        return this._page;
+    }
+
+    public constructor(private readonly _page: Page, private readonly _url = 'https://allo.ua/') {
+        this.CatalogComponent = new CatalogComponent(this._page.locator('div>ul.mm__list'));
     }
 
 
@@ -50,7 +58,6 @@ export class AlloBasePage {
     public async searchFor(query: string): Promise<void> {
         await this.searchInput.fill(query);
         await this.searchButton.click();
-        // await this.page.waitForURL('**/catalogsearch/result/?q=Iphone%20Air', { waitUntil: 'load' });
     }
 
     public get searchResults(): Locator {
