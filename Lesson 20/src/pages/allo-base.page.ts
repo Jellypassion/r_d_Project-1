@@ -22,8 +22,12 @@ export class AlloBasePage {
     // Catalog component - call openCatalog() first to display the catalog menu
     public readonly CatalogComponent: CatalogComponent;
 
-    public constructor(private readonly page: Page, private readonly _url = 'https://allo.ua/') {
+    public constructor(private readonly _page: Page, private readonly _url = 'https://allo.ua/') {
         this.CatalogComponent = new CatalogComponent(this.page.locator('div>ul.mm__list'));
+    }
+
+    public get page(): Page {
+        return this._page;
     }
 
 
