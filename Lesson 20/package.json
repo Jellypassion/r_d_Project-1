@@ -1,0 +1,33 @@
+{
+  "name": "lesson-20",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "cucumber-js --config cucumber.cjs --profile local"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@eslint/js": "^9.37.0",
+    "@stylistic/eslint-plugin": "^5.4.0",
+    "@stylistic/eslint-plugin-ts": "^4.4.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.0",
+    "eslint": "^9.37.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-unicorn": "^61.0.2",
+    "globals": "^16.4.0",
+    "prettier": "^3.6.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.46.0"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^12.3.0",
+    "@cucumber/pretty-formatter": "^2.4.1",
+    "@types/chai": "^5.2.3",
+    "chai": "^6.2.1",
+    "playwright": "^1.57.0"
+  }
+}
