@@ -58,7 +58,6 @@ export class AlloBasePage {
     public async searchFor(query: string): Promise<void> {
         await this.searchInput.fill(query);
         await this.searchButton.click();
-        // await this.page.waitForURL('**/catalogsearch/result/?q=Iphone%20Air', { waitUntil: 'load' });
     }
 
     public get searchResults(): Locator {
