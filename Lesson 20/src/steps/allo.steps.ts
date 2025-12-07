@@ -1,4 +1,4 @@
-import { Given, Then, When } from '@cucumber/cucumber';
+import { DataTable, Given, Then, When } from '@cucumber/cucumber';
 import { RobotDreamsWorld } from '../worlds/rd.world.ts';
 import { expect } from 'chai';
 
@@ -26,21 +26,9 @@ When('user opens the catalog menu', async function (this: RobotDreamsWorld) {
     await this.alloPage.openCatalog();
 });
 
-Then('catalog items are displayed', async function (this: RobotDreamsWorld) {
+Then('catalog contains the following items:', async function (this: RobotDreamsWorld, items: DataTable) {
     const catalogItems = await this.alloPage.CatalogComponent.getCatalogItems();
-    const expectedItems = [
-        'Тримай заряд',
-        'Електричні авто',
-        'Смартфони та телефони',
-        'Xiaomi',
-        'Apple',
-        'Телевізори та мультимедіа',
-        'Побутова техніка',
-        'Ноутбуки, ПК та планшети',
-        'Товари для геймерів',
-        'Смарт-годинники і гаджети',
-        'Аудіо'
-    ];
+    const expectedItems = items.hashes().map(row => row['item']);
     for (const expectedItem of expectedItems) {
         const itemIsFound = catalogItems.some((item) => item === expectedItem);
         expect(itemIsFound, `Catalog item "${expectedItem}" should be displayed`).to.be.true;
