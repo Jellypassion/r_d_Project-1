@@ -37,21 +37,22 @@ jobs:
         echo "Allure report dir listing (if present):"
         ls -la allure-report || true
 
-    - uses: actions/upload-artifact@v4
+    - name: Upload Playwright blob report
+      uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
-        name: playwright-report
-        path: playwright-report/**
+        name: blob-report
+        path: blob-report/**
+        if-no-files-found: warn
         retention-days: 30
 
-    - name: Generate Allure Single-file report
+    - name: Generate Allure HTML report
       run: |
-        npx allure generate allure-results --single-file --clean -o allure-report-single-file
-      # working-directory: ${{ env.BUILD_FOLDER }}
+        npx allure generate allure-results -o allure-report || echo "No results to generate"
 
-    - uses: actions/upload-artifact@v4
-      if: ${{ !cancelled() }}
+    - name: Upload Allure HTML report
+      uses: actions/upload-artifact@v3
       with:
-        name: upload allure-report-single-file
-        path: allure-report-single-file/**
-        retention-days: 30
+        name: allure-report
+        path: allure-report/**
+        if-no-files-found: warn
