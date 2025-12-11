@@ -51,7 +51,7 @@ jobs:
         npx allure generate allure-results -o allure-report || echo "No results to generate"
 
     - name: Upload Allure HTML report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: allure-report
         path: allure-report/**
