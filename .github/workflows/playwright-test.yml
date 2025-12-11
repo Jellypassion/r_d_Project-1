@@ -42,7 +42,7 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: blob-report
-        path: ./blob-report/**
+        path: Lesson_22/blob-report/**
         if-no-files-found: warn
         retention-days: 30
 
@@ -64,5 +64,5 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: allure-report
-        path: ./allure-report/**
+        path: Lesson_22/allure-report/**
         if-no-files-found: warn
