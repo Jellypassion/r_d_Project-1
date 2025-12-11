@@ -8,9 +8,11 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    env:
+      BUILD_FOLDER: ./Lesson_22
     defaults:
       run:
-        working-directory: 'Lesson_22'
+        working-directory: ${{ env.BUILD_FOLDER }}
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -23,46 +25,37 @@ jobs:
     - name: Run Playwright tests
       run: npm run test
 
-    - name: Debug - show files
-      run: |
-        echo "PWD: $(pwd)"
-        echo "Workspace root content:"
-        ls -la
-        echo "Tree (3 levels):"
-        find . -maxdepth 3 -type d -print
-        echo "Playwright report dir listing (if present):"
-        ls -la playwright-report || true
-        echo "Allure results dir listing (if present):"
-        ls -la allure-results || true
-        echo "Allure report dir listing (if present):"
-        ls -la allure-report || true
+    - uses: daun/playwright-report-summary@v3
+      if: always()
+      with:
+        report-file: ${{ env.BUILD_FOLDER }}/test-results/test-results.json
+        report-tag: 'Test Results Summary'
+        job-summary: true
+        comment-on-pr: true
+
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: upload test-results
+        path: ${{ env.BUILD_FOLDER }}/test-results
+        retention-days: 30
 
     - name: Upload Playwright blob report
       uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: blob-report
-        path: Lesson_22/blob-report/**
+        path: ${{ env.BUILD_FOLDER }}/blob-report
         if-no-files-found: warn
         retention-days: 30
 
-    - name: Debug - blob-report contents
-      run: |
-        echo "Listing ./blob-report contents (pwd=$(pwd))"
-        ls -la ./blob-report || echo "./blob-report not found"
-
     - name: Generate Allure HTML report
       run: |
-        npx allure generate allure-results -o allure-report || echo "No results to generate"
-
-    - name: Debug - allure-report contents
-      run: |
-        echo "Listing ./allure-report contents (pwd=$(pwd))"
-        ls -la ./allure-report || echo "./allure-report not found"
+         npx allure generate allure-results --single-file --clean -o allure-report-single-file || echo "No results to generate"
 
     - name: Upload Allure HTML report
       uses: actions/upload-artifact@v4
       with:
-        name: allure-report
-        path: Lesson_22/allure-report/**
+        name: upload allure-report-single-file
+        path: ${{ env.BUILD_FOLDER }}/allure-report-single-file
         if-no-files-found: warn
