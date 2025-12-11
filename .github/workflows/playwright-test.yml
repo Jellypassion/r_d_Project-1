@@ -42,17 +42,27 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: blob-report
-        path: blob-report/**
+        path: ./blob-report/**
         if-no-files-found: warn
         retention-days: 30
+
+    - name: Debug - blob-report contents
+      run: |
+        echo "Listing ./blob-report contents (pwd=$(pwd))"
+        ls -la ./blob-report || echo "./blob-report not found"
 
     - name: Generate Allure HTML report
       run: |
         npx allure generate allure-results -o allure-report || echo "No results to generate"
 
+    - name: Debug - allure-report contents
+      run: |
+        echo "Listing ./allure-report contents (pwd=$(pwd))"
+        ls -la ./allure-report || echo "./allure-report not found"
+
     - name: Upload Allure HTML report
       uses: actions/upload-artifact@v4
       with:
         name: allure-report
-        path: allure-report/**
+        path: ./allure-report/**
         if-no-files-found: warn
