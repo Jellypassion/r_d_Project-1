@@ -23,7 +23,7 @@ jobs:
     - name: Run Playwright tests
       run: npm run test
 
-    - name: Debug: show files
+    - name: Debug - show files
       run: |
         echo "PWD: $(pwd)"
         echo "Workspace root content:"
