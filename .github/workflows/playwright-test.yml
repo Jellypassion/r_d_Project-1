@@ -23,11 +23,25 @@ jobs:
     - name: Run Playwright tests
       run: npm run test
 
+    - name: Debug: show files
+      run: |
+        echo "PWD: $(pwd)"
+        echo "Workspace root content:"
+        ls -la
+        echo "Tree (3 levels):"
+        find . -maxdepth 3 -type d -print
+        echo "Playwright report dir listing (if present):"
+        ls -la playwright-report || true
+        echo "Allure results dir listing (if present):"
+        ls -la allure-results || true
+        echo "Allure report dir listing (if present):"
+        ls -la allure-report || true
+
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
-        path: playwright-report/
+        path: playwright-report/**
         retention-days: 30
 
     - name: Generate Allure Single-file report
@@ -39,5 +53,5 @@ jobs:
       if: ${{ !cancelled() }}
       with:
         name: upload allure-report-single-file
-        path: allure-report-single-file/
+        path: allure-report-single-file/**
         retention-days: 30
