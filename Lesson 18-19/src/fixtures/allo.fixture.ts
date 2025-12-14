@@ -6,15 +6,12 @@ export interface AlloFixtures {
 };
 
 export const test = base.extend<AlloFixtures>({
-    alloPage: async ({ browser }, use) => {
-        const context = await browser.newContext();
-        const page = await context.newPage();
+    alloPage: async ({ page }, use) => {
         const alloPage = new AlloPage(page);
         await alloPage.openHomepage();
 
         await use(alloPage);
 
         await page.close();
-        await context.close();
     }
 });
