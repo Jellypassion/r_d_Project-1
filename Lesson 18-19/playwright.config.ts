@@ -29,14 +29,20 @@ export default defineConfig({
         // baseURL: 'http://localhost:3000',
 
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-        trace: 'on-first-retry'
+        trace: 'on-first-retry',
+        headless: false
     },
 
     /* Configure projects for major browsers */
     projects: [
         {
             name: 'chromium',
-            use: { ...devices['Desktop Chrome'] }
+            use: {
+                // ...devices['Desktop Chrome'],
+                browserName: 'chromium',
+                viewport: { width: 1280, height: 720 },
+                headless: false
+            }
         }
 
         // {
