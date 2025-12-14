@@ -7,3 +7,6 @@ Lesson 6/src/other.js
 **/.env
 reports/
 videos/
+**/allure-results/
+**/playwright-report/
+**/test-results/
