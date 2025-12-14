@@ -27,6 +27,7 @@ export default defineConfig({
         ? [
             ['list'],
             ['blob'],
+            ['html'],
             ['allure-playwright'],
             ['json', { outputFile: 'test-results/test-results.json' }],
             ['junit', { outputFile: 'test-results/test-results.xml' }]        ]

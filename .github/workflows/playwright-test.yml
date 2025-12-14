@@ -37,6 +37,17 @@ jobs:
     - name: Run Playwright tests
       run: npm run test
 
+    - echo "Workspace root content:"
+      ls -la
+      echo "Tree (3 levels):"
+      find . -maxdepth 3 -type d -print
+      echo "Playwright report dir listing (if present):"
+      ls -la playwright-report || true
+      echo "test-results dir listing (if present):"
+      ls -la test-results || true
+      echo "blob-report dir listing (if present):"
+      ls -la blob-report || true
+
     - uses: daun/playwright-report-summary@v3
       if: always()
       with:
