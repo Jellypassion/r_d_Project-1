@@ -1,6 +1,6 @@
 import { test } from '../src/fixtures/allo.fixture';
 
-test.describe('Catalog component tests', () => {
+test.describe('Catalog component tests', { tag: ['@catalog'] }, () => {
 
     test('check that catalog contains expected items', async ({ alloPage }) => {
         await alloPage.openCatalog();
