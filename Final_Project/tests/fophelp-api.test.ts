@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { FophelpApiClient } from '../src/helpers/fophelp-client';
 
-describe('Fophelp API Tests', () => {
+describe('Fophelp API Tests', async () => {
     let apiClient: FophelpApiClient;
 
     beforeAll(() => {
@@ -23,4 +23,11 @@ describe('Fophelp API Tests', () => {
     //     expect(newItem.id).toBeDefined();
     //     expect(newItem.name).toBe('Test Item');
     // });
+
+    // Example test
+    // const rawResponse = await api.post('/incomes/add', requestData);
+    // const parsedResponse = parseAddIncomeResponse(rawResponse);
+
+    // expect(parsedResponse.id).toMatch(/^[a-f0-9-]{36}$/); // UUID format
+    // expect(parsedResponse.message).toContain('Successfully created');
 });

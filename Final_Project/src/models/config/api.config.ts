@@ -23,4 +23,5 @@ export interface FophelpApiAuthConfigDto {
 
 export interface FophelpApiConfigDto {
     baseUrl: string;
+    apiVersion: string;
 }

@@ -30,7 +30,8 @@ export class ConfigService {
     private getApiConfig(): ApiConfigDto {
         return {
             fophelpApi: {
-                baseUrl: process.env.FOPHELP_BASE_URL || 'https://new.fophelp.pro'
+                baseUrl: process.env.FOPHELP_BASE_URL || 'https://new.fophelp.pro',
+                apiVersion: process.env.FOPHELP_API_VERSION || '/api/v2.0'
             }
         };
     }

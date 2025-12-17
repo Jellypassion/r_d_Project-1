@@ -2,7 +2,7 @@
 // It has been disabled after migrating to Fophelp API
 // You can delete this file or uncomment to use with the old API structure
 
-/*
+//*
 import { describe, expect, test } from 'vitest';
 import { ConfigService } from '../src/services/config.service';
 import { FetchApiService } from '../src/services/fetch-api-service';
