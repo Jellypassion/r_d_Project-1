@@ -4,7 +4,7 @@ import { TaxesDto } from '../../models/fophelp-api/taxes.dto';
 export class TaxServiceClient {
     public constructor(
         private readonly apiService: IApiService<Response>,
-        private readonly apiVersion = '/api/v2.0'
+        private readonly apiVersion: string
     ) {}
 
     public async getTaxes(): Promise<[Response, TaxesDto[]]> {

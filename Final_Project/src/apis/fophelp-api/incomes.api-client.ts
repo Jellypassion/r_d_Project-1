@@ -4,7 +4,7 @@ import { IApiService } from '../../services/abstractions/i-api-service';
 export class incomesApiClient {
     public constructor(
         private readonly apiService: IApiService<Response>,
-        private readonly apiVersion = '/api/v2.0'
+        private readonly apiVersion: string
     ) {}
 
     public async addIncome(income: string, date: string, comment: string, currency: string, cash: boolean): Promise<AddIncomeResponse> {
