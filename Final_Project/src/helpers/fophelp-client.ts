@@ -1,7 +1,9 @@
 import { ConfigService } from '../services/config.service';
 import { FetchApiService } from '../services/fetch-api-service';
-import { ExampleApi } from '../apis/fophelp-api/example.api';
+// import { ExampleApi } from '../apis/fophelp-api/example.api';
 import { TokenStorage } from '../services/token-storage';
+import { IncomesApiClient } from '../apis/fophelp-api/incomes.api-client';
+import { TaxesApiClient } from '../apis/fophelp-api/taxes.api-client';
 
 /**
  * Helper class to initialize and provide access to Fophelp API clients
@@ -10,7 +12,9 @@ export class FophelpApiClient {
     private readonly apiService: FetchApiService;
     private readonly tokenStorage: TokenStorage;
 
-    public readonly exampleApi: ExampleApi;
+    // public readonly exampleApi: ExampleApi;
+    public readonly incomesApi: IncomesApiClient;
+    public readonly taxesApi: TaxesApiClient;
 
     public constructor() {
         const configService = new ConfigService();
@@ -38,7 +42,9 @@ export class FophelpApiClient {
         );
 
         // Initialize API clients
-        this.exampleApi = new ExampleApi(this.apiService);
+        // this.exampleApi = new ExampleApi(this.apiService);
+        this.incomesApi = new IncomesApiClient(this.apiService, process.env.FOPHELP_API_VERSION || '/api/v2.0');
+        this.taxesApi = new TaxesApiClient(this.apiService, process.env.FOPHELP_API_VERSION || '/api/v2.0');
     }
 
     /**

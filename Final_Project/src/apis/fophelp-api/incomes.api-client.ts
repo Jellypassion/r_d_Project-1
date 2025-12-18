@@ -1,7 +1,7 @@
-import { AddIncomeRequest, AddIncomeResponse, IncomeDTO } from "src/models/fophelp-api/incomes.dto";
+import { AddIncomeRequest, AddIncomeResponse, IncomeDTO } from 'src/models/fophelp-api/incomes.dto';
 import { IApiService } from '../../services/abstractions/i-api-service';
 
-export class incomesApiClient {
+export class IncomesApiClient {
     public constructor(
         private readonly apiService: IApiService<Response>,
         private readonly apiVersion: string
@@ -11,6 +11,9 @@ export class incomesApiClient {
         const body: AddIncomeRequest = { income, date, comment, currency, cash };
 
         const response = await this.apiService.post(`${this.apiVersion}/incomes/add`, body);
+        if (!response.ok) {
+            throw new Error(`Failed to add income: ${response.statusText}`);
+        }
         const responseText = await response.text();
         return this.parseAddIncomeResponse(responseText);
     }
@@ -28,6 +31,9 @@ export class incomesApiClient {
 
     public async getIncomes(): Promise<[Response, IncomeDTO[]]> {
         const response = await this.apiService.get(`${this.apiVersion}/incomes`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch incomes: ${response.statusText}`);
+        }
         const incomesResponse = await response.json() as IncomeDTO[];
         return [response, incomesResponse];
     }
