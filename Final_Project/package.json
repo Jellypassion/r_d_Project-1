@@ -8,10 +8,17 @@
     "main": "index.js",
     "scripts": {
         "test": "vitest",
+        "test:api": "vitest",
+        "test:ui": "playwright test",
+        "test:ui:headed": "playwright test --headed",
+        "test:ui:debug": "playwright test --debug",
+        "test:ui:chromium": "playwright test --project=chromium",
+        "test:ui:report": "playwright show-report",
         "login": "ts-node scripts/login.ts"
     },
     "devDependencies": {
         "@eslint/js": "^9.39.1",
+        "@playwright/test": "^1.57.0",
         "@stylistic/eslint-plugin": "^5.5.0",
         "@stylistic/eslint-plugin-ts": "^4.4.1",
         "@types/dotenv": "^6.1.1",
