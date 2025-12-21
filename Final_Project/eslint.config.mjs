@@ -19,6 +19,7 @@ export default tsEslint.config({
     eslint.configs.recommended,
     ...tsEslint.configs.recommended,
     ...tsEslint.configs.stylistic,
+    eslintPluginPrettier,
   ],
   rules: {
     "no-unused-expressions": "off",
@@ -34,7 +35,7 @@ export default tsEslint.config({
         allowExpressions: true,
       },
     ],
-    "@stylistic/indent": ["error", 4],
+    // "@stylistic/indent": ["error", 4],
     "@stylistic/max-len": [
       "warn",
       {

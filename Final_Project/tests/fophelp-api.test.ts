@@ -22,7 +22,8 @@ describe('Fophelp API Tests', () => {
         expect(response.ok).toBe(true);
         expect(Array.isArray(incomes)).toBe(true);
         expect(incomes.length).toBeGreaterThan(0);
-        expect(Object.keys(incomes[0]))
-            .toEqual(expect.arrayContaining(['income', 'id', 'dt', 'userID', 'comment', 'type', 'currency', 'cash', 'taxPayed']));
+        expect(Object.keys(incomes[0])).toEqual(
+            expect.arrayContaining(['income', 'id', 'dt', 'userID', 'comment', 'type', 'currency', 'cash', 'taxPayed'])
+        );
     });
 });
