@@ -7,7 +7,8 @@
     "type": "commonjs",
     "main": "index.js",
     "scripts": {
-        "test": "vitest"
+        "test": "vitest",
+        "login": "ts-node scripts/login.ts"
     },
     "devDependencies": {
         "@eslint/js": "^9.39.1",

@@ -12,11 +12,20 @@ npm install
 2. Configure environment variables:
    - Copy `.env.example` to `.env`
    - Update the values in `.env` with your actual credentials:
-     - `X_ACCESS_TOKEN`: Your JWT access token
-     - `X_REFRESH_TOKEN`: Your refresh token
-     - `X_USERNAME`: Your username (URL encoded)
-     - `X_REFRESH_EXPIRES`: Token expiration date
-     - `SESSION_USER`: Session user identifier
+     - `API_USERNAME`: Your email address
+     - `API_PASSWORD`: Your password
+
+3. Login to get fresh tokens:
+```bash
+npm run login
+```
+
+This will authenticate and automatically update your `.env` file with:
+- `X_ACCESS_TOKEN`: JWT access token
+- `X_REFRESH_TOKEN`: Refresh token UUID
+- `X_USERNAME`: URL-encoded username
+- `X_REFRESH_EXPIRES`: Token expiration date
+- `SESSION_USER`: Session user identifier
 
 ## Project Structure
 
@@ -27,9 +36,30 @@ npm install
 
 ## Authentication
 
-The project uses cookie-based authentication with **automatic token refresh**.
+The project uses cookie-based authentication with **automatic token refresh** and **login functionality**.
 
-### How It Works
+### Login
+
+Get fresh authentication tokens:
+
+```bash
+npm run login
+```
+
+Or in code:
+
+```typescript
+import { FophelpApiClient } from './src/helpers/fophelp-client';
+
+const apiClient = new FophelpApiClient();
+
+// Login using credentials from .env and update tokens
+await apiClient.authApi.loginFromEnv(true);
+```
+
+**See [LOGIN_GUIDE.md](LOGIN_GUIDE.md) for complete login documentation.**
+
+### Automatic Token Refresh
 
 - Tokens are stored in memory via `TokenStorage`
 - When the access token expires (after 1 hour), the system automatically:
@@ -38,17 +68,7 @@ The project uses cookie-based authentication with **automatic token refresh**.
   3. Updates tokens from response `Set-Cookie` headers
   4. Retries the original request with new tokens
 
-### Usage
-
-```typescript
-import { FophelpApiClient } from './src/helpers/fophelp-client';
-
-const apiClient = new FophelpApiClient();
-// Token refresh happens automatically!
-const data = await apiClient.exampleApi.getAll();
-```
-
-**See [TOKEN_REFRESH.md](TOKEN_REFRESH.md) for detailed documentation.**
+**See [TOKEN_REFRESH.md](TOKEN_REFRESH.md) for detailed token refresh documentation.**
 
 ## Running Tests
 
