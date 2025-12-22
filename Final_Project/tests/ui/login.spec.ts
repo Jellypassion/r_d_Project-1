@@ -1,5 +1,5 @@
 import { test, expect } from '../../src/ui/fixtures/fophelp.fixture';
-import { HomePage } from '../../src/ui/pages/HomePage';
+import { HomePage } from '../../src/ui/pages/home.page';
 
 /**
  * Test suite demonstrating authenticated UI tests
@@ -14,13 +14,9 @@ test.describe('Authenticated User Tests', () => {
     // Navigate to home page
     await homePage.goto();
 
-    // Verify user is logged in
-    const isLoggedIn = await homePage.isLoggedIn();
-    expect(isLoggedIn).toBeTruthy();
-
     // Verify header component is visible
     await homePage.header.waitForVisible();
-    const headerVisible = await homePage.header.isVisible();
+    const headerVisible =  await homePage.isHeaderDisplayed();
     expect(headerVisible).toBeTruthy();
 
     await page.close();
@@ -33,7 +29,6 @@ test.describe('Authenticated User Tests', () => {
     await homePage.goto();
     await homePage.waitForPageReady();
 
-    // Check if user is logged in via header
     const isLoggedIn = await homePage.header.isUserLoggedIn();
     expect(isLoggedIn).toBeTruthy();
 
@@ -42,8 +37,9 @@ test.describe('Authenticated User Tests', () => {
 
   test('should have valid authentication cookies', async ({ authenticatedContext }) => {
     // Verify that we have the expected cookies
-    const { cookies } = authenticatedContext;
+    const  cookies  = await authenticatedContext.context.cookies();
 
+    console.log(cookies);
     // Check for required cookies
     const cookieNames = cookies.map(c => c.name);
     expect(cookieNames).toContain('X-Access-Token');
@@ -87,11 +83,10 @@ test.describe('Authenticated User Tests', () => {
     await homePage.header.logout();
 
     // Wait for redirect to login page
-    await page.waitForURL('**/login', { timeout: 10000 });
+    await page.waitForLoadState('load');
 
-    // Verify we're on login page
-    const url = page.url();
-    expect(url).toContain('/login');
+    const isUserLoggedIn = await homePage.header.isUserLoggedIn();
+    expect(isUserLoggedIn).toBeFalsy();
 
     await page.close();
   });

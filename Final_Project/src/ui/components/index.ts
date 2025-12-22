@@ -1,3 +1,4 @@
-// Components
-export { BaseComponent } from './BaseComponent';
-export { HeaderComponent } from './HeaderComponent';
+export { BaseComponent } from './base.component';
+export { HeaderComponent } from './header.component';
+export { AuthPopup } from './auth.popup';
+export { AddIncomePopup } from './add-income.popup';

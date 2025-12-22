@@ -48,7 +48,7 @@ export default defineConfig({
     timezoneId: 'Europe/Kiev',
 
     // Viewport size
-    viewport: { width: 1920, height: 1080 },
+    viewport: { width: 1280, height: 1024 },
 
     // User agent
     // userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)',
@@ -66,7 +66,7 @@ export default defineConfig({
       name: 'chromium',
       use: {
         ...devices['Desktop Chrome'],
-        viewport: { width: 1920, height: 1080 },
+        viewport: { width: 1280, height: 1024 },
       },
     },
 

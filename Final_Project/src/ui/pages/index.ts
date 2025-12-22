@@ -1,4 +1,2 @@
-// Pages
-export { BasePage } from './BasePage';
-export { LoginPage } from './LoginPage';
-export { HomePage } from './HomePage';
+export { BasePage } from './base.page';
+export { HomePage } from './home.page';

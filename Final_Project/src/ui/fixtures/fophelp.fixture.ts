@@ -1,6 +1,6 @@
 import { test as base, BrowserContext, Cookie } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
 import dotenv from 'dotenv';
+import { HomePage } from '../pages';
 
 // Load environment variables
 dotenv.config();
@@ -15,21 +15,47 @@ export interface AuthContext {
 
 /**
  * Parse cookies from set-cookie headers
- * Extracts only the cookie name=value pair, ignoring metadata like expires, path, samesite, httponly
+ * Extracts cookie name=value pair and metadata (expires, path, samesite, httponly, secure)
  */
 function parseCookie(setCookieHeader: string, domain: string): Cookie {
-  // Split by semicolon and take only the first part (name=value)
-  const nameValuePart = setCookieHeader.split(';')[0].trim();
-  const [name, value] = nameValuePart.split('=');
+  const parts = setCookieHeader.split(';').map(p => p.trim());
 
-  // Return minimal cookie object - Playwright will handle the rest
+  // First part is name=value
+  const [name, value] = parts[0].split('=').map(p => p.trim());
+
+  // Initialize cookie with required fields
   const cookie: Cookie = {
-    name: name.trim(),
-    value: value.trim(),
-    domain: domain,
+    name,
+    value,
+    domain,
     path: '/',
     sameSite: 'Strict',
+    expires: -1,
+    httpOnly: false,
+    secure: false,
   };
+
+  // Parse remaining attributes
+  for (let i = 1; i < parts.length; i++) {
+    const part = parts[i];
+    const lowerPart = part.toLowerCase();
+
+    if (lowerPart.startsWith('expires=')) {
+      const expiresStr = part.substring('expires='.length).trim();
+      // Parse the date and convert to Unix timestamp (seconds)
+      const expiresDate = new Date(expiresStr);
+      cookie.expires = Math.floor(expiresDate.getTime() / 1000);
+    } else if (lowerPart.startsWith('path=')) {
+      cookie.path = part.substring('path='.length).trim();
+    } else if (lowerPart.startsWith('samesite=')) {
+      const sameSiteValue = part.substring('samesite='.length).trim();
+      cookie.sameSite = sameSiteValue.charAt(0).toUpperCase() + sameSiteValue.slice(1) as any;
+    } else if (lowerPart === 'httponly') {
+      cookie.httpOnly = true;
+    } else if (lowerPart === 'secure') {
+      cookie.secure = true;
+    }
+  }
 
   return cookie;
 }
@@ -51,18 +77,23 @@ export const test = base.extend<{ authenticatedContext: AuthContext }>({
       throw new Error('EMAIL and PASSWORD must be set in .env file');
     }
 
-    // Perform login
-    const loginPage = new LoginPage(page);
-    await loginPage.goto();
+    // Navigate to home page
+    const homePage = new HomePage(page);
+    await homePage.goto();
+
+    // Open auth popup from header
+    const authPopup = await homePage.header.clickSignin();
+    await authPopup.waitForVisible();
 
     // Listen for response to capture cookies
     const responsePromise = page.waitForResponse(
-      (response) => response.url().includes('/login') || response.url().includes('/auth'),
+      (response) => response.url().includes('/api/react/authenticate/login') && response.status() === 200,
       { timeout: 30000 }
     );
 
     // Perform login
-    await loginPage.login(email, password);
+    await authPopup.login(email, password);
+    await authPopup.waitForSuccessfulLogin();
 
     // Wait for login response
     const response = await responsePromise;
