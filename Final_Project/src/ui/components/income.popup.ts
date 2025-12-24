@@ -1,18 +1,21 @@
 import { Locator, Page } from '@playwright/test';
 import { BaseComponent } from './base.component';
 
-export class AddIncomePopup extends BaseComponent {
+export class IncomePopup extends BaseComponent {
+
     //locators
     private readonly closeButton: Locator;
     private readonly dateInput: Locator;
     private readonly currencyDropdown: Locator;
     private readonly incomeAmountInput: Locator;
+    private readonly amountErrorMessage: Locator;
     private readonly currencySymbol: Locator;
     private readonly noIncomeForMonthCheckbox: Locator;
     private readonly cashCheckbox: Locator;
     private readonly commentField: Locator;
+    private readonly commentErrorMessage: Locator;
     private readonly cancelButton: Locator;
-    private readonly addButton: Locator;
+    private readonly saveButton: Locator;
 
     constructor(page: Page) {
         super(page, 'div.modal-content');
@@ -21,12 +24,14 @@ export class AddIncomePopup extends BaseComponent {
         this.dateInput = this.locator('input#date');
         this.currencyDropdown = this.locator('select#currency');
         this.incomeAmountInput = this.locator('input#amount');
+        this.amountErrorMessage = this.locator('div.amount-input-wrapper + span.error-message');
         this.currencySymbol = this.locator('.amount-input-wrapper > .currency-symbol'); // ₴
         this.noIncomeForMonthCheckbox = this.locator('label:has-text("За звітний місяць не було доходу") input[type="checkbox"]');
         this.cashCheckbox = this.locator('label:has-text("Готівкові кошти") input[type="checkbox"]');
         this.commentField = this.locator('textarea#comment');
+        this.commentErrorMessage = this.commentField.locator('xpath=following-sibling::span.error-message');
         this.cancelButton = this.locator('button:has-text("Скасувати")');
-        this.addButton = this.locator('button:has-text("Додати")');
+        this.saveButton = this.locator('button:has-text("Додати"), button:has-text("Зберегти")');
 
     }
 
@@ -85,11 +90,19 @@ export class AddIncomePopup extends BaseComponent {
         await this.cancelButton.click();
     }
 
+    async clickSave(): Promise<void> {
+        await this.saveButton.click();
+    }
+
     async clickAdd(): Promise<void> {
-        await this.addButton.click();
+        await this.clickSave();
     }
 
     async close(): Promise<void> {
         await this.closeButton.click();
+    }
+
+    async waitForHidden() {
+        await this.rootLocator.waitFor({ state: 'hidden', timeout: 5000 });
     }
 }

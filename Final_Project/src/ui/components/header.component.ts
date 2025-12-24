@@ -4,6 +4,7 @@ import { AuthPopup } from './auth.popup';
 
 export class HeaderComponent extends BaseComponent {
     private readonly logo: Locator;
+    private readonly pageName: Locator;
     private readonly themeToggleButton: Locator;
     private readonly userName: Locator;
     private readonly signinButton: Locator;
@@ -19,6 +20,7 @@ export class HeaderComponent extends BaseComponent {
         super(page, '.sticky-header-nav');
 
         this.logo = this.locator('.brand-logo');
+        this.pageName = this.logo.locator('span.page-name');
         this.themeToggleButton = this.locator('button.theme-toggle');
         this.signinButton = this.locator('.signin-button, button:has-text("Увійти")');
         this.registerButton = this.locator('.register-button, button:has-text("Реєстрація")');
@@ -35,6 +37,10 @@ export class HeaderComponent extends BaseComponent {
 
     async clickLogo(): Promise<void> {
         await this.logo.click();
+    }
+
+    async getPageName(): Promise<string> {
+        return await this.getText(this.pageName);
     }
 
     async toggleTheme(): Promise<void> {
