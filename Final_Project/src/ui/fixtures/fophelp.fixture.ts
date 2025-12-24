@@ -61,8 +61,8 @@ export const test = base.extend<{ authenticatedContext: AuthContext }>({
     const context = await browser.newContext();
     const page = await context.newPage();
 
-    const email = process.env.EMAIL;
-    const password = process.env.PASSWORD;
+    const email = process.env.UI_EMAIL;
+    const password = process.env.UI_PASSWORD;
 
     if (!email || !password) {
       throw new Error('EMAIL and PASSWORD must be set in .env file');

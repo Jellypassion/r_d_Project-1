@@ -8,12 +8,15 @@
     "main": "index.js",
     "scripts": {
         "test": "vitest",
-        "test:api": "vitest",
-        "test:ui": "playwright test",
+        "test:api": "vitest tests/api/fophelp-api.test.ts",
+        "test:ui": "playwright test tests/ui/login.spec.ts tests/ui/incomes.spec.ts",
         "test:ui:headed": "playwright test --headed",
         "test:ui:debug": "playwright test --debug",
         "test:ui:chromium": "playwright test --project=chromium",
         "test:ui:report": "playwright show-report",
+        "allure:generate": "allure generate allure-results -o allure-report --clean --single-file",
+        "allure:open": "allure open allure-report",
+        "allure:clean": "rm -rf allure-results allure-report",
         "login": "ts-node scripts/login.ts"
     },
     "devDependencies": {
@@ -23,6 +26,8 @@
         "@stylistic/eslint-plugin-ts": "^4.4.1",
         "@types/dotenv": "^6.1.1",
         "@types/node": "^24.10.0",
+        "allure-commandline": "^2.36.0",
+        "allure-playwright": "^3.4.3",
         "eslint": "^9.39.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.4",

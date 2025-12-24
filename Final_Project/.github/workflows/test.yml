@@ -81,6 +81,10 @@ jobs:
       - name: Run UI tests
         run: npm run test:ui -- --project=${{ matrix.browser }}
 
+      - name: Generate Allure Report
+        if: always()
+        run: npm run allure:generate
+
       - name: Upload Playwright Report
         if: always()
         uses: actions/upload-artifact@v4
@@ -88,6 +92,14 @@ jobs:
           name: playwright-report-${{ matrix.browser }}
           path: playwright-report/
           retention-days: 7
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-${{ matrix.browser }}
+          path: allure-report/
+          retention-days: 30
 
       - name: Upload test results
         if: always()

@@ -13,7 +13,6 @@ export class FophelpApiClient {
     private readonly apiService: FetchApiService;
     private readonly tokenStorage: TokenStorage;
 
-    // public readonly exampleApi: ExampleApi;
     public readonly incomesApi: IncomesApiClient;
     public readonly taxesApi: TaxesApiClient;
     public readonly authApi: AuthApiClient;
@@ -44,7 +43,6 @@ export class FophelpApiClient {
         );
 
         // Initialize API clients
-        // this.exampleApi = new ExampleApi(this.apiService);
         this.incomesApi = new IncomesApiClient(this.apiService, process.env.FOPHELP_API_VERSION || '/api/v2.0');
         this.taxesApi = new TaxesApiClient(this.apiService, process.env.FOPHELP_API_VERSION || '/api/v2.0');
         this.authApi = new AuthApiClient(this.apiService, config.api.fophelpApi.baseUrl);
