@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { FophelpApiClient } from '../src/helpers/fophelp-client';
+import { FophelpApiClient } from '../../src/helpers/fophelp-client';
 
 describe('Fophelp API Tests', () => {
     let apiClient: FophelpApiClient;

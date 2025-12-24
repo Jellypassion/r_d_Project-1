@@ -8,8 +8,6 @@ export class IncomeTableComponent extends BaseComponent {
     private readonly currencyCellLocator: Locator;
     private readonly cashCellLocator: Locator;
     private readonly commentCellLocator: Locator;
-    private readonly recordsCountValueLocator: Locator;
-    private readonly totalMonthIncomeLocator: Locator;
 
     constructor(page: Page) {
         super(page, 'div.income-table-container');
@@ -19,8 +17,6 @@ export class IncomeTableComponent extends BaseComponent {
         this.currencyCellLocator = this.locator('td.currency-cell');
         this.cashCellLocator = this.locator('td.cash-cell');
         this.commentCellLocator = this.locator('td.comment-cell');
-        this.recordsCountValueLocator = this.locator('span.records-count');
-        this.totalMonthIncomeLocator = this.locator('span.total-amount');
     }
 
     async getMonthGroupByMonthYear(monthYear: string): Promise<Locator> {
@@ -50,7 +46,7 @@ export class IncomeTableComponent extends BaseComponent {
 
     async getRecordsCountFromInnerTableValue(monthYear: string): Promise<number> {
         const monthGroup = await this.getMonthGroupByMonthYear(monthYear);
-        const countText = await monthGroup.locator(this.recordsCountValueLocator).textContent();
+        const countText = await monthGroup.locator('span.records-count').textContent();
         if (!countText) return 0;
 
         // Extract number after "Записів: "
@@ -60,7 +56,7 @@ export class IncomeTableComponent extends BaseComponent {
 
     async getTotalMonthIncomeValue(monthYear: string): Promise<number> {
         const monthGroup = await this.getMonthGroupByMonthYear(monthYear);
-        const totalText = await monthGroup.locator(this.totalMonthIncomeLocator).textContent();
+        const totalText = await monthGroup.locator('span.total-amount').textContent();
         if (!totalText) return 0;
         const match = totalText.match(/[\d\s,]+/);
         if (!match) return 0;
@@ -69,12 +65,10 @@ export class IncomeTableComponent extends BaseComponent {
         return parseFloat(numberString);
     }
 
-    // Find row by any cell content
     getRowByText(text: string): Locator {
         return this.locator(`tbody tr:has-text("${text}")`);
     }
 
-    // Find row by specific column
     getRowByDate(date: string): Locator {
         return this.locator(`tbody tr:has(.date-cell:text("${date}"))`);
     }
@@ -83,7 +77,6 @@ export class IncomeTableComponent extends BaseComponent {
         return this.locator(`tbody tr:has(.comment-cell:text("${comment}"))`);
     }
 
-    // Get buttons for a specific row
     getEditButton(row: Locator): Locator {
         return row.locator('.modify-btn');
     }
@@ -92,7 +85,6 @@ export class IncomeTableComponent extends BaseComponent {
         return row.locator('.delete-btn');
     }
 
-    // Convenience methods
     async editRowByComment(comment: string): Promise<void> {
         const row = this.getRowByComment(comment);
         await this.getEditButton(row).click();
@@ -106,7 +98,6 @@ export class IncomeTableComponent extends BaseComponent {
         await this.getDeleteButton(row).click();
     }
 
-    // Get all comments from the table
     async getAllComments(): Promise<string[]> {
         const commentCells = this.locator('tbody .comment-cell');
         return await commentCells.allTextContents();

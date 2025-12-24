@@ -132,7 +132,7 @@ export class IncomesPage extends BasePage {
 
   // ========== Table verification methods ==========
 
-  async getRecordCountForMonth(monthYear: string): Promise<number> {
+  async getRecordCountForMonth(monthYear: string): Promise<number> {// format: 'грудень 2025'
     return await this.incomeTable.getRecordCountByMonthYear(monthYear);
   }
 

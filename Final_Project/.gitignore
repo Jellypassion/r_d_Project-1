@@ -40,3 +40,5 @@ yarn-error.log*
 
 # Local test files
 tests/auth.test.ts
+tests/seed.spec.ts
+tests/token-refresh.test.ts

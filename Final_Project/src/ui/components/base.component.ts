@@ -33,9 +33,6 @@ export abstract class BaseComponent {
     await locator.fill(text);
   }
 
-  /**
-   * Get text content from element within component
-   */
   protected async getText(locator: Locator): Promise<string> {
     return await locator.textContent() || '';
   }

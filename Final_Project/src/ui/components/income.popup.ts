@@ -3,7 +3,6 @@ import { BaseComponent } from './base.component';
 
 export class IncomePopup extends BaseComponent {
 
-    //locators
     private readonly closeButton: Locator;
     private readonly dateInput: Locator;
     private readonly currencyDropdown: Locator;
