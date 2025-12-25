@@ -144,7 +144,11 @@ test.describe('Incomes page tests', () => {
         expect(await incomesPage.isIncomeDisplayed(comment)).toBeTruthy();
 
         await incomesPage.deleteIncome(comment);
+
         await incomesPage.waitForPageLoad();
+        await incomesPage.incomeTable.waitForVisible();
+        await page.waitForTimeout(1000); // Give the table time to update
+
         expect(await incomesPage.isIncomeDisplayed(comment)).toBeFalsy();
     });
 });

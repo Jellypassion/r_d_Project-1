@@ -86,6 +86,7 @@ test.describe('Authenticated User Tests', () => {
     await page.waitForLoadState('load');
 
     const isUserLoggedIn = await homePage.header.isUserLoggedIn();
+    await homePage.waitForPageReady();
     expect(isUserLoggedIn).toBeFalsy();
 
     await page.close();
