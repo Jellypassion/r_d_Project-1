@@ -81,12 +81,10 @@ test.describe('Authenticated User Tests', () => {
 
     // Perform logout
     await homePage.header.logout();
-
-    // Wait for redirect to login page
-    await page.waitForLoadState('load');
+    await homePage.waitForPageReady();
+    await page.waitForTimeout(1000);
 
     const isUserLoggedIn = await homePage.header.isUserLoggedIn();
-    await homePage.waitForPageReady();
     expect(isUserLoggedIn).toBeFalsy();
 
     await page.close();

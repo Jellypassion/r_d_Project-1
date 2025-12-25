@@ -44,7 +44,7 @@ jobs:
       - name: Generate Allure Report
         if: always()
         run: |
-         npx allure generate allure-results --single-file --clean -o allure-report-single-file || echo "No results to generate"
+         npx allure generate allure-results --single-file --clean -o allure-report || echo "No results to generate"
 
       - name: Upload Allure Report
         if: always()
@@ -105,7 +105,7 @@ jobs:
       - name: Generate Allure Report
         if: always()
         run: |
-         npx allure generate allure-results --single-file --clean -o allure-report-single-file || echo "No results to generate"
+         npx allure generate allure-results --single-file --clean -o allure-report || echo "No results to generate"
 
 
       - name: Upload Playwright Report

@@ -141,13 +141,15 @@ test.describe('Incomes page tests', () => {
             noIncome: false
         };
         await incomesPage.addIncome(incomeData);
+        await incomesPage.incomeTable.waitForVisible();
+
         expect(await incomesPage.isIncomeDisplayed(comment)).toBeTruthy();
 
         await incomesPage.deleteIncome(comment);
 
         await incomesPage.waitForPageLoad();
         await incomesPage.incomeTable.waitForVisible();
-        await page.waitForTimeout(1000); // Give the table time to update
+        await page.waitForTimeout(1000);
 
         expect(await incomesPage.isIncomeDisplayed(comment)).toBeFalsy();
     });
