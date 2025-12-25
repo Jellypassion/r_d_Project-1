@@ -5,7 +5,6 @@ import { HeaderComponent } from '../components/header.component';
 export class HomePage extends BasePage {
   public readonly header: HeaderComponent;
 
-
   private readonly mainContent: Locator;
   private readonly homeTitle: Locator;
 

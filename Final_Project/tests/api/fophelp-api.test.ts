@@ -6,7 +6,7 @@ describe('Fophelp API Tests', () => {
 
     beforeAll(async () => {
         apiClient = new FophelpApiClient();
-        await apiClient.ensureAuthenticated();
+        await apiClient.ensureAuthenticated(false);
     });
 
     it('should be able to add income', async () => {
