@@ -65,7 +65,7 @@ export const test = base.extend<{ authenticatedContext: AuthContext }>({
     const password = process.env.UI_PASSWORD;
 
     if (!email || !password) {
-      throw new Error('EMAIL and PASSWORD must be set in .env file');
+      throw new Error('UI_EMAIL and UI_PASSWORD must be set in .env file');
     }
 
     const homePage = new HomePage(page);

@@ -41,6 +41,18 @@ jobs:
       - name: Run API tests
         run: npm run test:api
 
+      - name: Generate Allure Report
+        if: always()
+        run: npm run allure:generate
+
+      - name: Upload Allure Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-report-api
+          path: Final_Project/allure-report/
+          retention-days: 30
+
       - name: Upload API test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -83,8 +95,8 @@ jobs:
       - name: Create .env file
         run: |
           echo "FOPHELP_BASE_URL=${{ secrets.FOPHELP_BASE_URL }}" >> .env
-          echo "EMAIL=${{ secrets.UI_EMAIL }}" >> .env
-          echo "PASSWORD=${{ secrets.UI_PASSWORD }}" >> .env
+          echo "UI_EMAIL=${{ secrets.UI_EMAIL }}" >> .env
+          echo "UI_PASSWORD=${{ secrets.UI_PASSWORD }}" >> .env
 
       - name: Run UI tests
         run: npm run test:ui -- --project=${{ matrix.browser }}

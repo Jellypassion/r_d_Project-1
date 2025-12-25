@@ -4,8 +4,9 @@ import { FophelpApiClient } from '../../src/helpers/fophelp-client';
 describe('Fophelp API Tests', () => {
     let apiClient: FophelpApiClient;
 
-    beforeAll(() => {
+    beforeAll(async () => {
         apiClient = new FophelpApiClient();
+        await apiClient.ensureAuthenticated();
     });
 
     it('should be able to add income', async () => {

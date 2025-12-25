@@ -21,18 +21,14 @@ export class FophelpApiClient {
         const configService = new ConfigService();
         const config = configService.getConfig();
 
-        // Initialize token storage with current tokens
-        if (!config.auth.fophelpApi?.cookies) {
-            throw new Error('Fophelp API authentication cookies are not configured');
-        }
-
-        const cookieConfig = config.auth.fophelpApi.cookies;
+        // Initialize token storage with current tokens or placeholders
+        const cookieConfig = config.auth.fophelpApi?.cookies;
         this.tokenStorage = new TokenStorage({
-            accessToken: cookieConfig.xAccessToken,
-            refreshToken: cookieConfig.xRefreshToken,
-            username: cookieConfig.xUsername,
-            refreshExpires: cookieConfig.xRefreshExpires,
-            sessionUser: cookieConfig.sessionUser
+            accessToken: cookieConfig?.xAccessToken || '',
+            refreshToken: cookieConfig?.xRefreshToken || '',
+            username: cookieConfig?.xUsername || '',
+            refreshExpires: cookieConfig?.xRefreshExpires || '',
+            sessionUser: cookieConfig?.sessionUser || ''
         });
 
         // Initialize API service with token storage for automatic refresh
@@ -46,6 +42,28 @@ export class FophelpApiClient {
         this.incomesApi = new IncomesApiClient(this.apiService, process.env.FOPHELP_API_VERSION || '/api/v2.0');
         this.taxesApi = new TaxesApiClient(this.apiService, process.env.FOPHELP_API_VERSION || '/api/v2.0');
         this.authApi = new AuthApiClient(this.apiService, config.api.fophelpApi.baseUrl);
+    }
+
+    /**
+     * Ensure user is authenticated by logging in if needed
+     * Automatically detects if running in CI environment (GitHub Actions)
+     * @param forceLogin If true, always performs login even if tokens exist
+     * @returns Promise that resolves when authentication is complete
+     */
+    public async ensureAuthenticated(forceLogin: boolean = false): Promise<void> {
+        const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
+        const hasValidTokens = this.tokenStorage.getAccessToken() && this.tokenStorage.getRefreshToken();
+
+        if (forceLogin || isCI || !hasValidTokens) {
+            const response = await this.authApi.loginFromEnv(false);
+            this.tokenStorage.updateTokens({
+                accessToken: response.accessToken,
+                refreshToken: response.refreshToken,
+                username: response.username,
+                refreshExpires: response.refreshExpires,
+                sessionUser: response.sessionUser
+            });
+        }
     }
 
     /**
