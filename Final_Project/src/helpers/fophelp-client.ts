@@ -1,0 +1,82 @@
+import { ConfigService } from '../services/config.service';
+import { FetchApiService } from '../services/fetch-api-service';
+// import { ExampleApi } from '../apis/fophelp-api/example.api';
+import { TokenStorage } from '../services/token-storage';
+import { IncomesApiClient } from '../apis/fophelp-api/incomes.api-client';
+import { TaxesApiClient } from '../apis/fophelp-api/taxes.api-client';
+import { AuthApiClient } from '../apis/fophelp-api/auth.api-client';
+
+/**
+ * Helper class to initialize and provide access to Fophelp API clients
+ */
+export class FophelpApiClient {
+    private readonly apiService: FetchApiService;
+    private readonly tokenStorage: TokenStorage;
+
+    public readonly incomesApi: IncomesApiClient;
+    public readonly taxesApi: TaxesApiClient;
+    public readonly authApi: AuthApiClient;
+
+    public constructor() {
+        const configService = new ConfigService();
+        const config = configService.getConfig();
+
+        // Initialize token storage with current tokens or placeholders
+        const cookieConfig = config.auth.fophelpApi?.cookies;
+        this.tokenStorage = new TokenStorage({
+            accessToken: cookieConfig?.xAccessToken || '',
+            refreshToken: cookieConfig?.xRefreshToken || '',
+            username: cookieConfig?.xUsername || '',
+            refreshExpires: cookieConfig?.xRefreshExpires || '',
+            sessionUser: cookieConfig?.sessionUser || ''
+        });
+
+        // Initialize API service with token storage for automatic refresh
+        this.apiService = new FetchApiService(
+            config.api.fophelpApi.baseUrl,
+            {}, // Empty secret object, using token storage instead
+            this.tokenStorage
+        );
+
+        // Initialize API clients
+        this.incomesApi = new IncomesApiClient(this.apiService, process.env.FOPHELP_API_VERSION || '/api/v2.0');
+        this.taxesApi = new TaxesApiClient(this.apiService, process.env.FOPHELP_API_VERSION || '/api/v2.0');
+        this.authApi = new AuthApiClient(this.apiService, config.api.fophelpApi.baseUrl);
+    }
+
+    /**
+     * Ensure user is authenticated by logging in if needed
+     * Automatically detects if running in CI environment (GitHub Actions)
+     * @param forceLogin If true, always performs login even if tokens exist
+     * @returns Promise that resolves when authentication is complete
+     */
+    public async ensureAuthenticated(forceLogin: boolean = false): Promise<void> {
+        const isCI = process.env.CI === 'true' || process.env.GITHUB_ACTIONS === 'true';
+        const hasValidTokens = this.tokenStorage.getAccessToken() && this.tokenStorage.getRefreshToken();
+
+        if (forceLogin || isCI || !hasValidTokens) {
+            const response = await this.authApi.loginFromEnv(false);
+            this.tokenStorage.updateTokens({
+                accessToken: response.accessToken,
+                refreshToken: response.refreshToken,
+                username: response.username,
+                refreshExpires: response.refreshExpires,
+                sessionUser: response.sessionUser
+            });
+        }
+    }
+
+    /**
+     * Get the underlying API service for custom requests
+     */
+    public getApiService(): FetchApiService {
+        return this.apiService;
+    }
+
+    /**
+     * Get the token storage to check current token values
+     */
+    public getTokenStorage(): TokenStorage {
+        return this.tokenStorage;
+    }
+}
